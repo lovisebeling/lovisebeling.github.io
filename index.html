@@ -1,637 +1,1827 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Portfolio — Étudiant Développeur</title>
+    <title>Lovis Ebeling — Développement informatique</title>
+
     <meta
         name="description"
-        content="Portfolio d'un étudiant en deuxième année de développement informatique."
+        content="Portfolio de Lovis Ebeling, étudiant en développement informatique."
     >
 
-    <!-- Tailwind CSS -->
+
+    <!-- ==================================================
+         FAVICON
+    =================================================== -->
+
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%238b5cf6'/%3E%3Ctext x='50' y='67' font-size='55' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3ELE%3C/text%3E%3C/svg%3E"
+    >
+
+
+    <!-- ==================================================
+         TAILWIND CSS
+    =================================================== -->
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
+
         tailwind.config = {
-            darkMode: 'class',
+
             theme: {
+
                 extend: {
+
                     colors: {
-                        primary: '#8b5cf6',
-                        secondary: '#06b6d4'
+                        primary: "#8b5cf6"
+                    },
+
+                    animation: {
+
+                        "fade-in":
+                            "fadeIn 1s ease-out forwards",
+
+                        "fade-up":
+                            "fadeUp 0.8s ease-out forwards",
+
+                        "float":
+                            "float 4s ease-in-out infinite",
+
+                        "pulse-slow":
+                            "pulseSlow 3s ease-in-out infinite"
+
+                    },
+
+                    keyframes: {
+
+                        fadeIn: {
+
+                            "0%": {
+                                opacity: "0"
+                            },
+
+                            "100%": {
+                                opacity: "1"
+                            }
+
+                        },
+
+                        fadeUp: {
+
+                            "0%": {
+                                opacity: "0",
+                                transform: "translateY(30px)"
+                            },
+
+                            "100%": {
+                                opacity: "1",
+                                transform: "translateY(0)"
+                            }
+
+                        },
+
+                        float: {
+
+                            "0%, 100%": {
+                                transform: "translateY(0)"
+                            },
+
+                            "50%": {
+                                transform: "translateY(-10px)"
+                            }
+
+                        },
+
+                        pulseSlow: {
+
+                            "0%, 100%": {
+                                opacity: "0.5"
+                            },
+
+                            "50%": {
+                                opacity: "1"
+                            }
+
+                        }
+
                     }
+
                 }
+
             }
-        }
+
+        };
+
     </script>
+
+
+    <!-- ==================================================
+         CSS PERSONNALISÉ
+    =================================================== -->
+
+    <style>
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            overflow-x: hidden;
+        }
+
+
+        /* Barre de progression */
+
+        #progressBar {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            height: 3px;
+
+            width: 0%;
+
+            background: #8b5cf6;
+
+            z-index: 9999;
+
+            transition: width 0.1s linear;
+
+        }
+
+
+        /* Curseur lumineux */
+
+        .cursor-glow {
+
+            position: fixed;
+
+            width: 300px;
+
+            height: 300px;
+
+            border-radius: 50%;
+
+            pointer-events: none;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(139, 92, 246, 0.10),
+                    transparent 65%
+                );
+
+            transform: translate(-50%, -50%);
+
+            z-index: 0;
+
+        }
+
+
+        /* Sections */
+
+        .reveal {
+
+            opacity: 0;
+
+            transform: translateY(35px);
+
+            transition:
+                opacity 0.8s ease,
+                transform 0.8s ease;
+
+        }
+
+
+        .reveal.active {
+
+            opacity: 1;
+
+            transform: translateY(0);
+
+        }
+
+
+        /* Cartes */
+
+        .project-card,
+        .skill-card,
+        .interest-card {
+
+            transition:
+                transform 0.35s ease,
+                border-color 0.35s ease,
+                box-shadow 0.35s ease;
+
+        }
+
+
+        .project-card:hover,
+        .skill-card:hover,
+        .interest-card:hover {
+
+            transform:
+                translateY(-8px);
+
+            border-color: rgb(139 92 246);
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.35);
+
+        }
+
+
+        /* Boutons */
+
+        .btn {
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+
+        }
+
+
+        .btn:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 10px 30px
+                rgba(139, 92, 246, 0.25);
+
+        }
+
+
+        /* Texte qui clignote */
+
+        .typing-cursor {
+
+            display: inline-block;
+
+            width: 2px;
+
+            height: 1em;
+
+            background: #8b5cf6;
+
+            margin-left: 4px;
+
+            animation:
+                blink 0.8s infinite;
+
+        }
+
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+
+        }
+
+
+        /* Animation du menu */
+
+        #mobileMenu {
+
+            transition:
+                max-height 0.4s ease,
+                opacity 0.4s ease;
+
+        }
+
+
+        /* Sélection */
+
+        ::selection {
+
+            background: #8b5cf6;
+
+            color: white;
+
+        }
+
+    </style>
+
 </head>
+
+
 
 <body class="bg-slate-950 text-slate-100">
 
-    <!-- ================= HEADER ================= -->
-    <header class="fixed top-0 left-0 w-full z-50
-                   bg-slate-950/80 backdrop-blur-lg
-                   border-b border-slate-800">
 
-        <nav class="max-w-6xl mx-auto px-6 py-4
-                    flex items-center justify-between">
+<!-- Barre de progression -->
 
-            <a href="#accueil"
-               class="text-xl font-bold">
-                <span class="text-violet-500">&lt;</span>
-                MonPortfolio
-                <span class="text-violet-500">/&gt;</span>
+<div id="progressBar"></div>
+
+
+<!-- Halo de souris -->
+
+<div
+    id="cursorGlow"
+    class="cursor-glow hidden md:block">
+</div>
+
+
+
+<!-- ==================================================
+     NAVIGATION
+=================================================== -->
+
+<header
+    id="navbar"
+    class="fixed top-0 left-0 w-full z-50
+           bg-slate-950/70 backdrop-blur-xl
+           border-b border-slate-800
+           transition-all duration-300">
+
+    <nav
+        class="max-w-6xl mx-auto px-6 py-4
+               flex items-center justify-between">
+
+
+        <!-- Logo -->
+
+        <a
+            href="#accueil"
+            class="text-xl font-bold
+                   hover:text-violet-400
+                   transition">
+
+            <span class="text-violet-500">&lt;</span>
+
+            Lovis
+
+            <span class="text-violet-500">/&gt;</span>
+
+        </a>
+
+
+
+        <!-- Navigation desktop -->
+
+        <div
+            class="hidden md:flex items-center gap-8">
+
+            <a
+                href="#accueil"
+                class="nav-link text-slate-300
+                       hover:text-violet-400
+                       transition">
+
+                Accueil
+
             </a>
 
-            <!-- Menu desktop -->
-            <div class="hidden md:flex items-center gap-8">
 
-                <a href="#accueil"
-                   class="text-slate-300 hover:text-violet-400 transition">
-                    Accueil
-                </a>
+            <a
+                href="#apropos"
+                class="nav-link text-slate-300
+                       hover:text-violet-400
+                       transition">
 
-                <a href="#apropos"
-                   class="text-slate-300 hover:text-violet-400 transition">
-                    À propos
-                </a>
+                À propos
 
-                <a href="#competences"
-                   class="text-slate-300 hover:text-violet-400 transition">
-                    Compétences
-                </a>
+            </a>
 
-                <a href="#projets"
-                   class="text-slate-300 hover:text-violet-400 transition">
-                    Projets
-                </a>
 
-                <a href="#contact"
-                   class="px-4 py-2 rounded-lg
-                          bg-violet-600 hover:bg-violet-700
-                          transition">
-                    Contact
-                </a>
-            </div>
+            <a
+                href="#competences"
+                class="nav-link text-slate-300
+                       hover:text-violet-400
+                       transition">
 
-            <!-- Menu mobile -->
-            <button id="menuButton"
-                    class="md:hidden text-2xl">
-                ☰
-            </button>
-        </nav>
+                Compétences
 
-        <!-- Menu mobile -->
-        <div id="mobileMenu"
-             class="hidden md:hidden px-6 pb-5">
+            </a>
 
-            <div class="flex flex-col gap-4">
 
-                <a href="#accueil"
-                   class="text-slate-300 hover:text-violet-400">
-                    Accueil
-                </a>
+            <a
+                href="#parcours"
+                class="nav-link text-slate-300
+                       hover:text-violet-400
+                       transition">
 
-                <a href="#apropos"
-                   class="text-slate-300 hover:text-violet-400">
-                    À propos
-                </a>
+                Parcours
 
-                <a href="#competences"
-                   class="text-slate-300 hover:text-violet-400">
-                    Compétences
-                </a>
+            </a>
 
-                <a href="#projets"
-                   class="text-slate-300 hover:text-violet-400">
-                    Projets
-                </a>
 
-                <a href="#contact"
-                   class="text-slate-300 hover:text-violet-400">
-                    Contact
-                </a>
+            <a
+                href="#interets"
+                class="nav-link text-slate-300
+                       hover:text-violet-400
+                       transition">
 
-            </div>
+                Intérêts
+
+            </a>
+
+
+            <a
+                href="#contact"
+                class="btn px-4 py-2 rounded-lg
+                       bg-violet-600
+                       hover:bg-violet-700">
+
+                Contact
+
+            </a>
+
         </div>
-    </header>
 
 
-    <main>
 
-        <!-- ================= HERO ================= -->
-        <section id="accueil"
-                 class="min-h-screen flex items-center
-                        pt-24 px-6">
+        <!-- Bouton mobile -->
 
-            <div class="max-w-6xl mx-auto w-full">
+        <button
+            id="menuButton"
+            class="md:hidden text-2xl
+                   text-slate-300
+                   hover:text-violet-400">
 
-                <div class="max-w-3xl">
+            ☰
 
-                    <p class="text-violet-400 font-medium mb-4">
-                        Bonjour, je suis
-                    </p>
+        </button>
 
-                    <h1 class="text-5xl md:text-7xl
-                               font-bold tracking-tight mb-6">
+    </nav>
 
-                        Étudiant en
-                        <span class="text-violet-500">
-                            développement
-                        </span>
-                        informatique.
-                    </h1>
 
-                    <p class="text-lg md:text-xl
-                              text-slate-400 leading-relaxed mb-8">
 
-                        Je suis actuellement en deuxième année de
-                        développement informatique. Je m'intéresse
-                        particulièrement au développement web,
-                        aux applications et aux nouvelles technologies.
-                    </p>
+    <!-- Menu mobile -->
 
-                    <div class="flex flex-wrap gap-4">
+    <div
+        id="mobileMenu"
+        class="hidden md:hidden
+               px-6 pb-5
+               bg-slate-950/95">
 
-                        <a href="#projets"
-                           class="px-6 py-3 rounded-lg
-                                  bg-violet-600
-                                  hover:bg-violet-700
-                                  font-medium transition">
+        <div class="flex flex-col gap-4">
 
-                            Voir mes projets
-                        </a>
+            <a href="#accueil">Accueil</a>
 
-                        <a href="#contact"
-                           class="px-6 py-3 rounded-lg
-                                  border border-slate-700
-                                  hover:border-violet-500
-                                  hover:text-violet-400
-                                  transition">
+            <a href="#apropos">À propos</a>
 
-                            Me contacter
-                        </a>
+            <a href="#competences">Compétences</a>
 
-                    </div>
+            <a href="#parcours">Parcours</a>
 
-                </div>
+            <a href="#interets">Intérêts</a>
 
-            </div>
-        </section>
+            <a href="#contact">Contact</a>
 
+        </div>
 
-        <!-- ================= À PROPOS ================= -->
-        <section id="apropos"
-                 class="py-24 px-6 bg-slate-900">
+    </div>
 
-            <div class="max-w-6xl mx-auto">
+</header>
 
-                <div class="mb-12">
 
-                    <p class="text-violet-400 font-medium mb-2">
-                        À PROPOS
-                    </p>
 
-                    <h2 class="text-3xl md:text-4xl font-bold">
-                        Qui suis-je ?
-                    </h2>
+<main>
 
-                </div>
 
-                <div class="grid md:grid-cols-2 gap-12">
 
-                    <div>
-                        <p class="text-slate-400 leading-relaxed mb-5">
-                            Je suis étudiant en deuxième année de
-                            développement informatique et je cherche
-                            constamment à améliorer mes compétences
-                            grâce à des projets personnels et scolaires.
-                        </p>
+<!-- ==================================================
+     HERO
+=================================================== -->
 
-                        <p class="text-slate-400 leading-relaxed">
-                            J'aime comprendre comment fonctionnent les
-                            applications et transformer des idées en
-                            projets concrets.
-                        </p>
-                    </div>
+<section
+    id="accueil"
+    class="min-h-screen flex items-center
+           pt-24 px-6 relative overflow-hidden">
 
-                    <div class="grid grid-cols-2 gap-4">
 
-                        <div class="p-6 rounded-xl
-                                    bg-slate-950
-                                    border border-slate-800">
+    <!-- Décoration -->
 
-                            <p class="text-3xl font-bold
-                                      text-violet-500">
-                                2
-                            </p>
+    <div
+        class="absolute top-1/4 right-10
+               w-72 h-72
+               bg-violet-600/10
+               rounded-full blur-3xl
+               animate-pulse-slow">
+    </div>
 
-                            <p class="text-slate-400 mt-2">
-                                Années d'études
-                            </p>
-                        </div>
 
-                        <div class="p-6 rounded-xl
-                                    bg-slate-950
-                                    border border-slate-800">
+    <div
+        class="absolute bottom-20 left-10
+               w-52 h-52
+               bg-purple-600/10
+               rounded-full blur-3xl
+               animate-float">
+    </div>
 
-                            <p class="text-3xl font-bold
-                                      text-violet-500">
-                                10+
-                            </p>
 
-                            <p class="text-slate-400 mt-2">
-                                Projets réalisés
-                            </p>
-                        </div>
 
-                    </div>
+    <div
+        class="max-w-6xl mx-auto w-full
+               relative z-10">
 
-                </div>
 
-            </div>
-        </section>
+        <div class="max-w-4xl">
 
 
-        <!-- ================= COMPÉTENCES ================= -->
-        <section id="competences"
-                 class="py-24 px-6">
+            <!-- Petit texte -->
 
-            <div class="max-w-6xl mx-auto">
+            <p
+                class="text-violet-400 font-medium mb-5
+                       animate-fade-up"
+                style="animation-delay: 0.1s">
 
-                <div class="mb-12">
+                ÉTUDIANT EN DÉVELOPPEMENT INFORMATIQUE
 
-                    <p class="text-violet-400 font-medium mb-2">
-                        COMPÉTENCES
-                    </p>
-
-                    <h2 class="text-3xl md:text-4xl font-bold">
-                        Technologies que j'utilise
-                    </h2>
-
-                </div>
-
-                <div class="grid sm:grid-cols-2 lg:grid-cols-4
-                            gap-5">
-
-                    <!-- HTML -->
-                    <div class="p-6 rounded-xl
-                                bg-slate-900
-                                border border-slate-800
-                                hover:border-violet-500
-                                transition">
-
-                        <h3 class="text-xl font-semibold mb-2">
-                            HTML
-                        </h3>
-
-                        <p class="text-slate-400">
-                            Création de structures web accessibles
-                            et sémantiques.
-                        </p>
-
-                    </div>
-
-                    <!-- CSS -->
-                    <div class="p-6 rounded-xl
-                                bg-slate-900
-                                border border-slate-800
-                                hover:border-violet-500
-                                transition">
-
-                        <h3 class="text-xl font-semibold mb-2">
-                            CSS / Tailwind
-                        </h3>
-
-                        <p class="text-slate-400">
-                            Création d'interfaces modernes,
-                            responsives et adaptées aux utilisateurs.
-                        </p>
-
-                    </div>
-
-                    <!-- JavaScript -->
-                    <div class="p-6 rounded-xl
-                                bg-slate-900
-                                border border-slate-800
-                                hover:border-violet-500
-                                transition">
-
-                        <h3 class="text-xl font-semibold mb-2">
-                            JavaScript
-                        </h3>
-
-                        <p class="text-slate-400">
-                            Développement d'interactions et
-                            fonctionnalités dynamiques.
-                        </p>
-
-                    </div>
-
-                    <!-- PHP -->
-                    <div class="p-6 rounded-xl
-                                bg-slate-900
-                                border border-slate-800
-                                hover:border-violet-500
-                                transition">
-
-                        <h3 class="text-xl font-semibold mb-2">
-                            PHP / SQL
-                        </h3>
-
-                        <p class="text-slate-400">
-                            Développement backend et gestion
-                            de bases de données.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-
-
-        <!-- ================= PROJETS ================= -->
-        <section id="projets"
-                 class="py-24 px-6 bg-slate-900">
-
-            <div class="max-w-6xl mx-auto">
-
-                <div class="mb-12">
-
-                    <p class="text-violet-400 font-medium mb-2">
-                        PROJETS
-                    </p>
-
-                    <h2 class="text-3xl md:text-4xl font-bold">
-                        Mes réalisations
-                    </h2>
-
-                </div>
-
-                <div class="grid md:grid-cols-2 lg:grid-cols-3
-                            gap-6">
-
-                    <!-- Projet 1 -->
-                    <article class="group rounded-xl overflow-hidden
-                                    bg-slate-950
-                                    border border-slate-800
-                                    hover:border-violet-500
-                                    transition">
-
-                        <div class="h-40 bg-slate-800
-                                    flex items-center justify-center">
-
-                            <span class="text-slate-500">
-                                Aperçu du projet
-                            </span>
-
-                        </div>
-
-                        <div class="p-6">
-
-                            <h3 class="text-xl font-bold mb-3">
-                                Projet Web
-                            </h3>
-
-                            <p class="text-slate-400 mb-5">
-                                Une application web réalisée dans
-                                le cadre de mes études.
-                            </p>
-
-                            <div class="flex flex-wrap gap-2">
-
-                                <span class="px-3 py-1 text-sm
-                                             rounded-full
-                                             bg-violet-500/10
-                                             text-violet-400">
-                                    HTML
-                                </span>
-
-                                <span class="px-3 py-1 text-sm
-                                             rounded-full
-                                             bg-violet-500/10
-                                             text-violet-400">
-                                    CSS
-                                </span>
-
-                                <span class="px-3 py-1 text-sm
-                                             rounded-full
-                                             bg-violet-500/10
-                                             text-violet-400">
-                                    JavaScript
-                                </span>
-
-                            </div>
-
-                        </div>
-                    </article>
-
-
-                    <!-- Projet 2 -->
-                    <article class="group rounded-xl overflow-hidden
-                                    bg-slate-950
-                                    border border-slate-800
-                                    hover:border-violet-500
-                                    transition">
-
-                        <div class="h-40 bg-slate-800
-                                    flex items-center justify-center">
-
-                            <span class="text-slate-500">
-                                Aperçu du projet
-                            </span>
-
-                        </div>
-
-                        <div class="p-6">
-
-                            <h3 class="text-xl font-bold mb-3">
-                                API / Backend
-                            </h3>
-
-                            <p class="text-slate-400 mb-5">
-                                Projet permettant de manipuler
-                                des données grâce à une API.
-                            </p>
-
-                            <div class="flex flex-wrap gap-2">
-
-                                <span class="px-3 py-1 text-sm
-                                             rounded-full
-                                             bg-violet-500/10
-                                             text-violet-400">
-                                    PHP
-                                </span>
-
-                                <span class="px-3 py-1 text-sm
-                                             rounded-full
-                                             bg-violet-500/10
-                                             text-violet-400">
-                                    SQL
-                                </span>
-
-                                <span class="px-3 py-1 text-sm
-                                             rounded-full
-                                             bg-violet-500/10
-                                             text-violet-400">
-                                    API
-                                </span>
-
-                            </div>
-
-                        </div>
-                    </article>
-
-
-                    <!-- Projet 3 -->
-                    <article class="group rounded-xl overflow-hidden
-                                    bg-slate-950
-                                    border border-slate-800
-                                    hover:border-violet-500
-                                    transition">
-
-                        <div class="h-40 bg-slate-800
-                                    flex items-center justify-center">
-
-                            <span class="text-slate-500">
-                                Aperçu du projet
-                            </span>
-
-                        </div>
-
-                        <div class="p-6">
-
-                            <h3 class="text-xl font-bold mb-3">
-                                Projet personnel
-                            </h3>
-
-                            <p class="text-slate-400 mb-5">
-                                Un projet personnel destiné à
-                                expérimenter de nouvelles technologies.
-                            </p>
-
-                            <div class="flex flex-wrap gap-2">
-
-                                <span class="px-3 py-1 text-sm
-                                             rounded-full
-                                             bg-violet-500/10
-                                             text-violet-400">
-                                    JavaScript
-                                </span>
-
-                                <span class="px-3 py-1 text-sm
-                                             rounded-full
-                                             bg-violet-500/10
-                                             text-violet-400">
-                                    Git
-                                </span>
-
-                            </div>
-
-                        </div>
-                    </article>
-
-                </div>
-
-            </div>
-        </section>
-
-
-        <!-- ================= CONTACT ================= -->
-        <section id="contact"
-                 class="py-24 px-6">
-
-            <div class="max-w-3xl mx-auto text-center">
-
-                <p class="text-violet-400 font-medium mb-2">
-                    CONTACT
-                </p>
-
-                <h2 class="text-3xl md:text-4xl font-bold mb-5">
-                    Travaillons ensemble
-                </h2>
-
-                <p class="text-slate-400 mb-8">
-                    Vous souhaitez me contacter pour un stage,
-                    un projet ou simplement échanger ?
-                </p>
-
-                <a href="mailto:tonemail@example.com"
-                   class="inline-block px-6 py-3
-                          rounded-lg
-                          bg-violet-600
-                          hover:bg-violet-700
-                          transition font-medium">
-
-                    Envoyer un email
-                </a>
-
-            </div>
-        </section>
-
-    </main>
-
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="border-t border-slate-800 py-8 px-6">
-
-        <div class="max-w-6xl mx-auto
-                    flex flex-col md:flex-row
-                    items-center justify-between gap-4">
-
-            <p class="text-slate-500">
-                © 2026 — Mon Portfolio
             </p>
 
-            <div class="flex gap-5">
 
-                <a href="#"
-                   class="text-slate-400
-                          hover:text-violet-400">
-                    GitHub
+
+            <!-- Titre -->
+
+            <h1
+                class="text-5xl md:text-7xl
+                       font-bold tracking-tight
+                       mb-6 animate-fade-up"
+                style="animation-delay: 0.25s">
+
+                Lovis Ebeling
+
+            </h1>
+
+
+
+            <!-- Texte animé -->
+
+            <div
+                class="text-2xl md:text-3xl
+                       text-slate-300
+                       font-medium mb-6
+                       animate-fade-up"
+                style="animation-delay: 0.4s">
+
+                <span id="typingText"></span>
+
+                <span class="typing-cursor"></span>
+
+            </div>
+
+
+
+            <p
+                class="text-lg md:text-xl
+                       text-slate-400
+                       leading-relaxed
+                       max-w-3xl mb-8
+                       animate-fade-up"
+                style="animation-delay: 0.55s">
+
+                Étudiant en deuxième année à l'IPI du groupe IGS,
+                je développe mes compétences en informatique à
+                travers mes études et différents projets.
+
+            </p>
+
+
+
+            <!-- Boutons -->
+
+            <div
+                class="flex flex-wrap gap-4
+                       animate-fade-up"
+                style="animation-delay: 0.7s">
+
+
+                <a
+                    href="#parcours"
+                    class="btn px-6 py-3 rounded-lg
+                           bg-violet-600
+                           hover:bg-violet-700
+                           font-medium">
+
+                    Mon parcours
+
                 </a>
 
-                <a href="#"
-                   class="text-slate-400
-                          hover:text-violet-400">
-                    LinkedIn
+
+                <a
+                    href="#contact"
+                    class="btn px-6 py-3 rounded-lg
+                           border border-slate-700
+                           hover:border-violet-500
+                           hover:text-violet-400">
+
+                    Me contacter
+
                 </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- Indication scroll -->
+
+    <a
+        href="#apropos"
+        class="absolute bottom-8 left-1/2
+               -translate-x-1/2
+               text-slate-500
+               animate-bounce">
+
+        ↓
+
+    </a>
+
+</section>
+
+
+
+<!-- ==================================================
+     À PROPOS
+=================================================== -->
+
+<section
+    id="apropos"
+    class="py-24 px-6 bg-slate-900">
+
+
+    <div class="max-w-6xl mx-auto reveal">
+
+
+        <div class="mb-12">
+
+            <p class="text-violet-400 font-medium mb-2">
+                À PROPOS
+            </p>
+
+            <h2
+                class="text-3xl md:text-4xl font-bold">
+
+                Mon profil
+
+            </h2>
+
+        </div>
+
+
+
+        <div
+            class="grid md:grid-cols-2
+                   gap-12">
+
+
+            <div>
+
+                <p
+                    class="text-slate-400
+                           leading-relaxed mb-5">
+
+                    Je suis Lovis Ebeling, étudiant en deuxième
+                    année de développement informatique à l'IPI
+                    du groupe IGS.
+
+                </p>
+
+
+                <p
+                    class="text-slate-400
+                           leading-relaxed mb-5">
+
+                    Mon objectif est de continuer à progresser
+                    dans le domaine du développement informatique
+                    en travaillant sur des projets concrets.
+
+                </p>
+
+
+                <p
+                    class="text-slate-400
+                           leading-relaxed">
+
+                    Je m'intéresse également au design et à
+                    l'architecture, ce qui me permet de porter
+                    une attention particulière à la conception
+                    des interfaces.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- Informations -->
+
+            <div
+                class="grid sm:grid-cols-2 gap-4">
+
+
+                <div
+                    class="skill-card p-6 rounded-xl
+                           bg-slate-950
+                           border border-slate-800">
+
+                    <p
+                        class="text-violet-400
+                               text-sm mb-2">
+
+                        FORMATION
+
+                    </p>
+
+                    <h3 class="font-bold text-lg">
+
+                        IPI — Groupe IGS
+
+                    </h3>
+
+                    <p class="text-slate-400 mt-2">
+
+                        2025 — aujourd'hui
+
+                    </p>
+
+                </div>
+
+
+
+                <div
+                    class="skill-card p-6 rounded-xl
+                           bg-slate-950
+                           border border-slate-800">
+
+                    <p
+                        class="text-violet-400
+                               text-sm mb-2">
+
+                        PROFIL
+
+                    </p>
+
+                    <h3 class="font-bold text-lg">
+
+                        Développeur
+
+                    </h3>
+
+                    <p class="text-slate-400 mt-2">
+
+                        Étudiant
+
+                    </p>
+
+                </div>
+
 
             </div>
 
         </div>
 
-    </footer>
+    </div>
+
+</section>
 
 
-    <!-- ================= JAVASCRIPT ================= -->
-    <script>
 
-        // Menu mobile
-        const menuButton = document.getElementById("menuButton");
-        const mobileMenu = document.getElementById("mobileMenu");
+<!-- ==================================================
+     COMPÉTENCES
+=================================================== -->
 
-        menuButton.addEventListener("click", () => {
-            mobileMenu.classList.toggle("hidden");
-        });
+<section
+    id="competences"
+    class="py-24 px-6">
 
 
-        // Fermer le menu après avoir cliqué sur un lien
-        document.querySelectorAll("#mobileMenu a").forEach(link => {
+    <div class="max-w-6xl mx-auto reveal">
 
-            link.addEventListener("click", () => {
+
+        <div class="mb-12">
+
+            <p class="text-violet-400 font-medium mb-2">
+
+                COMPÉTENCES
+
+            </p>
+
+            <h2
+                class="text-3xl md:text-4xl font-bold">
+
+                Ce que j'apprends
+
+            </h2>
+
+        </div>
+
+
+
+        <div
+            class="grid sm:grid-cols-2
+                   lg:grid-cols-4 gap-5">
+
+
+            <div class="skill-card p-6 rounded-xl
+                        bg-slate-900
+                        border border-slate-800">
+
+                <div
+                    class="text-violet-400
+                           text-2xl mb-4">
+
+                    &lt;/&gt;
+
+                </div>
+
+                <h3 class="text-xl font-semibold mb-2">
+
+                    HTML / CSS
+
+                </h3>
+
+                <p class="text-slate-400">
+
+                    Création de pages web et interfaces
+                    responsives.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="skill-card p-6 rounded-xl
+                        bg-slate-900
+                        border border-slate-800">
+
+                <div
+                    class="text-violet-400
+                           text-2xl mb-4">
+
+                    JS
+
+                </div>
+
+                <h3 class="text-xl font-semibold mb-2">
+
+                    JavaScript
+
+                </h3>
+
+                <p class="text-slate-400">
+
+                    Développement de fonctionnalités
+                    interactives.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="skill-card p-6 rounded-xl
+                        bg-slate-900
+                        border border-slate-800">
+
+                <div
+                    class="text-violet-400
+                           text-2xl mb-4">
+
+                    PHP
+
+                </div>
+
+                <h3 class="text-xl font-semibold mb-2">
+
+                    PHP / SQL
+
+                </h3>
+
+                <p class="text-slate-400">
+
+                    Développement backend et manipulation
+                    de bases de données.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="skill-card p-6 rounded-xl
+                        bg-slate-900
+                        border border-slate-800">
+
+                <div
+                    class="text-violet-400
+                           text-2xl mb-4">
+
+                    Git
+
+                </div>
+
+                <h3 class="text-xl font-semibold mb-2">
+
+                    Git
+
+                </h3>
+
+                <p class="text-slate-400">
+
+                    Gestion et suivi des versions des projets.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     PARCOURS
+=================================================== -->
+
+<section
+    id="parcours"
+    class="py-24 px-6 bg-slate-900">
+
+
+    <div class="max-w-6xl mx-auto reveal">
+
+
+        <div class="mb-12">
+
+            <p class="text-violet-400 font-medium mb-2">
+
+                PARCOURS
+
+            </p>
+
+            <h2
+                class="text-3xl md:text-4xl font-bold">
+
+                Formation & expériences
+
+            </h2>
+
+        </div>
+
+
+
+        <div class="space-y-10">
+
+
+            <!-- IPI -->
+
+            <div
+                class="relative pl-8
+                       border-l border-violet-500
+                       group">
+
+                <div
+                    class="absolute -left-2 top-1
+                           w-4 h-4 rounded-full
+                           bg-violet-500
+                           group-hover:scale-150
+                           transition">
+
+                </div>
+
+
+                <p
+                    class="text-violet-400
+                           text-sm mb-1">
+
+                    2025 — aujourd'hui
+
+                </p>
+
+
+                <h3 class="text-xl font-bold">
+
+                    IPI — Groupe IGS
+
+                </h3>
+
+
+                <p class="text-slate-400 mt-2">
+
+                    Étudiant en développement informatique.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- Ferradou -->
+
+            <div
+                class="relative pl-8
+                       border-l border-slate-700
+                       group">
+
+                <div
+                    class="absolute -left-2 top-1
+                           w-4 h-4 rounded-full
+                           bg-slate-700
+                           group-hover:bg-violet-500
+                           group-hover:scale-150
+                           transition">
+
+                </div>
+
+
+                <p
+                    class="text-violet-400
+                           text-sm mb-1">
+
+                    2013 — 2025
+
+                </p>
+
+
+                <h3 class="text-xl font-bold">
+
+                    Le Ferradou — Blagnac
+
+                </h3>
+
+
+                <p class="text-slate-400 mt-2">
+
+                    Parcours scolaire.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- PROS -->
+
+            <div
+                class="relative pl-8
+                       border-l border-slate-700
+                       group">
+
+                <div
+                    class="absolute -left-2 top-1
+                           w-4 h-4 rounded-full
+                           bg-slate-700
+                           group-hover:bg-violet-500
+                           group-hover:scale-150
+                           transition">
+
+                </div>
+
+
+                <p
+                    class="text-violet-400
+                           text-sm mb-1">
+
+                    Stage d'observation
+
+                </p>
+
+
+                <h3 class="text-xl font-bold">
+
+                    PROS
+
+                </h3>
+
+
+                <p class="text-slate-400 mt-2">
+
+                    Stage d'observation effectué en troisième.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- Essence Grise -->
+
+            <div
+                class="relative pl-8 group">
+
+                <div
+                    class="absolute -left-2 top-1
+                           w-4 h-4 rounded-full
+                           bg-slate-700
+                           group-hover:bg-violet-500
+                           group-hover:scale-150
+                           transition">
+
+                </div>
+
+
+                <p
+                    class="text-violet-400
+                           text-sm mb-1">
+
+                    Stage d'observation
+
+                </p>
+
+
+                <h3 class="text-xl font-bold">
+
+                    Essence Grise
+
+                </h3>
+
+
+                <p class="text-slate-400 mt-2">
+
+                    Stage d'observation de seconde
+                    dans le domaine de la menuiserie.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     LANGUES
+=================================================== -->
+
+<section
+    class="py-24 px-6">
+
+
+    <div class="max-w-6xl mx-auto reveal">
+
+
+        <div class="mb-12">
+
+            <p class="text-violet-400 font-medium mb-2">
+
+                LANGUES
+
+            </p>
+
+            <h2
+                class="text-3xl md:text-4xl font-bold">
+
+                Langues parlées
+
+            </h2>
+
+        </div>
+
+
+
+        <div
+            class="grid sm:grid-cols-2
+                   lg:grid-cols-4 gap-5">
+
+
+            <div class="skill-card p-6 rounded-xl
+                        bg-slate-900
+                        border border-slate-800">
+
+                <h3 class="font-bold text-xl">
+
+                    Allemand
+
+                </h3>
+
+                <p class="text-violet-400 mt-2">
+
+                    Natif
+
+                </p>
+
+            </div>
+
+
+
+            <div class="skill-card p-6 rounded-xl
+                        bg-slate-900
+                        border border-slate-800">
+
+                <h3 class="font-bold text-xl">
+
+                    Français
+
+                </h3>
+
+                <p class="text-violet-400 mt-2">
+
+                    Courant
+
+                </p>
+
+            </div>
+
+
+
+            <div class="skill-card p-6 rounded-xl
+                        bg-slate-900
+                        border border-slate-800">
+
+                <h3 class="font-bold text-xl">
+
+                    Anglais
+
+                </h3>
+
+                <p class="text-violet-400 mt-2">
+
+                    Très bon
+
+                </p>
+
+            </div>
+
+
+
+            <div class="skill-card p-6 rounded-xl
+                        bg-slate-900
+                        border border-slate-800">
+
+                <h3 class="font-bold text-xl">
+
+                    Espagnol
+
+                </h3>
+
+                <p class="text-violet-400 mt-2">
+
+                    Basique
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     CENTRES D'INTÉRÊT
+=================================================== -->
+
+<section
+    id="interets"
+    class="py-24 px-6 bg-slate-900">
+
+
+    <div class="max-w-6xl mx-auto reveal">
+
+
+        <div class="mb-12">
+
+            <p class="text-violet-400 font-medium mb-2">
+
+                EN DEHORS DU CODE
+
+            </p>
+
+            <h2
+                class="text-3xl md:text-4xl font-bold">
+
+                Centres d'intérêt
+
+            </h2>
+
+        </div>
+
+
+
+        <div
+            class="grid sm:grid-cols-2
+                   lg:grid-cols-4 gap-5">
+
+
+            <div class="interest-card p-6 rounded-xl
+                        bg-slate-950
+                        border border-slate-800">
+
+                <div class="text-3xl mb-4">
+
+                    🥋
+
+                </div>
+
+                <h3 class="font-bold text-lg">
+
+                    Karaté
+
+                </h3>
+
+                <p class="text-slate-400 mt-2">
+
+                    Ceinture noire et arbitrage
+                    en compétition.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="interest-card p-6 rounded-xl
+                        bg-slate-950
+                        border border-slate-800">
+
+                <div class="text-3xl mb-4">
+
+                    🎨
+
+                </div>
+
+                <h3 class="font-bold text-lg">
+
+                    Design & architecture
+
+                </h3>
+
+                <p class="text-slate-400 mt-2">
+
+                    Intérêt pour le design et
+                    l'architecture.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="interest-card p-6 rounded-xl
+                        bg-slate-950
+                        border border-slate-800">
+
+                <div class="text-3xl mb-4">
+
+                    ♟
+
+                </div>
+
+                <h3 class="font-bold text-lg">
+
+                    Échecs
+
+                </h3>
+
+                <p class="text-slate-400 mt-2">
+
+                    Logique, stratégie et réflexion.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="interest-card p-6 rounded-xl
+                        bg-slate-950
+                        border border-slate-800">
+
+                <div class="text-3xl mb-4">
+
+                    📚
+
+                </div>
+
+                <h3 class="font-bold text-lg">
+
+                    Lecture
+
+                </h3>
+
+                <p class="text-slate-400 mt-2">
+
+                    Découverte de nouveaux univers
+                    et nouvelles idées.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     CONTACT
+=================================================== -->
+
+<section
+    id="contact"
+    class="py-24 px-6">
+
+
+    <div
+        class="max-w-3xl mx-auto
+               text-center reveal">
+
+
+        <p class="text-violet-400 font-medium mb-2">
+
+            CONTACT
+
+        </p>
+
+
+        <h2
+            class="text-3xl md:text-4xl
+                   font-bold mb-5">
+
+            Me contacter
+
+        </h2>
+
+
+        <p
+            class="text-slate-400 mb-8">
+
+            Vous souhaitez me contacter pour un stage,
+            un projet ou simplement échanger ?
+
+        </p>
+
+
+        <a
+            href="mailto:lovis.ebeling@yahoo.com"
+            class="btn inline-block
+                   px-6 py-3 rounded-lg
+                   bg-violet-600
+                   hover:bg-violet-700
+                   font-medium">
+
+            Envoyer un email
+
+        </a>
+
+
+        <div class="mt-6 text-slate-500">
+
+            <p>
+
+                lovis.ebeling@yahoo.com
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+</main>
+
+
+
+<!-- ==================================================
+     FOOTER
+=================================================== -->
+
+<footer
+    class="border-t border-slate-800
+           py-8 px-6">
+
+
+    <div
+        class="max-w-6xl mx-auto
+               flex flex-col md:flex-row
+               items-center justify-between
+               gap-4">
+
+
+        <p class="text-slate-500">
+
+            © 2026 Lovis Ebeling
+
+        </p>
+
+
+        <p class="text-slate-500">
+
+            Étudiant en développement informatique
+
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ==================================================
+     JAVASCRIPT
+=================================================== -->
+
+<script>
+
+
+/* =====================================================
+   TEXTE ANIMÉ
+===================================================== */
+
+const texts = [
+
+    "Développeur web.",
+    "Étudiant en informatique.",
+    "Passionné par la technologie."
+
+];
+
+let textIndex = 0;
+
+let charIndex = 0;
+
+let deleting = false;
+
+
+function typeEffect() {
+
+    const element =
+        document.getElementById("typingText");
+
+    const currentText =
+        texts[textIndex];
+
+
+    if (!deleting) {
+
+        element.textContent =
+            currentText.substring(
+                0,
+                charIndex + 1
+            );
+
+        charIndex++;
+
+
+        if (charIndex === currentText.length) {
+
+            deleting = true;
+
+            setTimeout(typeEffect, 1800);
+
+            return;
+
+        }
+
+    }
+
+    else {
+
+        element.textContent =
+            currentText.substring(
+                0,
+                charIndex - 1
+            );
+
+        charIndex--;
+
+
+        if (charIndex === 0) {
+
+            deleting = false;
+
+            textIndex =
+                (textIndex + 1) % texts.length;
+
+        }
+
+    }
+
+
+    const speed =
+        deleting ? 45 : 75;
+
+
+    setTimeout(typeEffect, speed);
+
+}
+
+
+typeEffect();
+
+
+
+/* =====================================================
+   MENU MOBILE
+===================================================== */
+
+const menuButton =
+    document.getElementById("menuButton");
+
+const mobileMenu =
+    document.getElementById("mobileMenu");
+
+
+menuButton.addEventListener(
+    "click",
+    () => {
+
+        mobileMenu.classList.toggle("hidden");
+
+    }
+);
+
+
+document
+    .querySelectorAll("#mobileMenu a")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
                 mobileMenu.classList.add("hidden");
+
+            }
+        );
+
+    });
+
+
+
+/* =====================================================
+   ANIMATION AU SCROLL
+===================================================== */
+
+const reveals =
+    document.querySelectorAll(".reveal");
+
+
+const observer =
+    new IntersectionObserver(
+
+        (entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("active");
+
+                }
+
             });
 
-        });
+        },
 
-    </script>
+        {
+            threshold: 0.15
+        }
+
+    );
+
+
+reveals.forEach(
+    element => observer.observe(element)
+);
+
+
+
+/* =====================================================
+   BARRE DE PROGRESSION
+===================================================== */
+
+const progressBar =
+    document.getElementById("progressBar");
+
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        const scrollTop =
+            window.scrollY;
+
+        const documentHeight =
+            document.documentElement.scrollHeight
+            - window.innerHeight;
+
+
+        const progress =
+            (scrollTop / documentHeight) * 100;
+
+
+        progressBar.style.width =
+            progress + "%";
+
+    }
+);
+
+
+
+/* =====================================================
+   EFFET DU HEADER AU SCROLL
+===================================================== */
+
+const navbar =
+    document.getElementById("navbar");
+
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        if (window.scrollY > 30) {
+
+            navbar.classList.add(
+                "shadow-lg"
+            );
+
+            navbar.classList.add(
+                "bg-slate-950/95"
+            );
+
+        }
+
+        else {
+
+            navbar.classList.remove(
+                "shadow-lg"
+            );
+
+            navbar.classList.remove(
+                "bg-slate-950/95"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   HALO QUI SUIT LA SOURIS
+===================================================== */
+
+const cursorGlow =
+    document.getElementById("cursorGlow");
+
+
+document.addEventListener(
+    "mousemove",
+    (event) => {
+
+        cursorGlow.style.left =
+            event.clientX + "px";
+
+        cursorGlow.style.top =
+            event.clientY + "px";
+
+    }
+);
+
+
+</script>
+
 
 </body>
 </html>
-```
